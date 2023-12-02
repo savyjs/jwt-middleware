@@ -61,7 +61,7 @@ func (j *JWT) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	headerToken := req.Header.Get(j.authHeader)
 
 	if len(headerToken) == 0 {
-		http.Error(res, "Request error", http.StatusUnauthorized)
+		j.next.ServeHTTP(res, req)
 		return
 	}
 	
@@ -92,7 +92,7 @@ func (j *JWT) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 		fmt.Println(req.Header)
 		j.next.ServeHTTP(res, req)
 	} else {
-		http.Error(res, "Not allowed", http.StatusUnauthorized)
+		j.next.ServeHTTP(res, req)
 	}
 }
 
